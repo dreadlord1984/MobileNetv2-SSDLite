@@ -742,6 +742,11 @@ layer {
     def generate(self, stage, gen_ssd, size, class_num, nobn, eps, relu6):
       self.class_num = class_num
       self.lmdb = FLAGS.lmdb
+      if FLAGS.lmdb == "":
+          if stage == "train":
+              self.lmdb = "trainval_lmdb"
+          elif stage == "test":
+              self.lmdb = "test_lmdb"
       self.label_map = FLAGS.label_map
       self.stage = stage
       self.nobn = nobn
@@ -834,13 +839,13 @@ if __name__ == '__main__':
   parser.add_argument(
       '-d','--lmdb',
       type=str,
-      default="trainval_lmdb",
-      help='The training database'
+      default="",
+      help='The training or testing database'
   )
   parser.add_argument(
       '-l','--label-map',
       type=str,
-      default="labelmap_coco.prototxt",
+      default="labelmap.prototxt",
       help='The label map for ssd training.'
   )
   parser.add_argument(
